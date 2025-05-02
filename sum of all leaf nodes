@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+// Function to create a new node
+TreeNode* newNode(int val) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->val = val;
+    node->left = node->right = NULL;
+    return node;
+}
+
+// Function to insert a node into the BST
+TreeNode* insert(TreeNode* root, int value) {
+    if (root == NULL) {
+        return newNode(value);
+    }
+    if (value < root->val) {
+        root->left = insert(root->left, value);
+    } else {
+        root->right = insert(root->right, value);
+    }
+    return root;
+}
+
+// Function to calculate the sum of all leaf nodes
+int sumOfLeafNodes(TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    // If the node is a leaf node (no left or right child)
+    if (root->left == NULL && root->right == NULL) {
+        return root->val;
+    }
+    // Recursively calculate the sum of leaf nodes in left and right subtrees
+    return sumOfLeafNodes(root->left) + sumOfLeafNodes(root->right);
+}
+
+int main() {
+    int N;
+    scanf("%d", &N);  // Read the number of nodes
+    int values[N];
+    
+    // Read the node values to be inserted into the BST
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &values[i]);
+    }
+    
+    TreeNode* root = NULL;
+    
+    // Build the BST by inserting each value
+    for (int i = 0; i < N; i++) {
+        root = insert(root, values[i]);
+    }
+    
+    // Calculate the sum of all leaf nodes
+    int leafSum = sumOfLeafNodes(root);
+    
+    // Output the result
+    printf("%d\n", leafSum);
+
+    return 0;
+}
